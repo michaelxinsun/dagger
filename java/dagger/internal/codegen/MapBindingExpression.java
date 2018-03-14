@@ -99,8 +99,7 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
             .add("$T.", isImmutableMapAvailable ? ImmutableMap.class : MapBuilder.class)
             .add(maybeTypeParameters(requestingClass));
         if (isImmutableMapAvailable) {
-          // TODO(ronshapiro): builderWithExpectedSize
-          instantiation.add("builder()");
+          instantiation.add("builderWithExpectedSize($L)", dependencies.size());
         } else {
           instantiation.add("newMapBuilder($L)", dependencies.size());
         }
