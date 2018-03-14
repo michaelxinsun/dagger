@@ -98,7 +98,7 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
             .add("$T.", isImmutableSetAvailable ? ImmutableSet.class : SetBuilder.class)
             .add(maybeTypeParameter(requestingClass));
         if (isImmutableSetAvailable) {
-          instantiation.add("builder()");
+          instantiation.add("builderWithExpectedSize($L)", binding.dependencies().size());
         } else {
           instantiation.add("newSetBuilder($L)", binding.dependencies().size());
         }
