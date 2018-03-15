@@ -162,7 +162,7 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
   }
 
   private boolean isImmutableSetBuilderWithExpectedSizeAvailable() {
-    if (isImmutableSetAvailable) {
+    if (isImmutableSetAvailable()) {
       return methodsIn(elements.getTypeElement(ImmutableSet.class).getEnclosedElements())
           .stream()
           .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
