@@ -55,8 +55,8 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
   @Override
   Expression getDependencyExpression(ClassName requestingClass) {
     // TODO(ronshapiro): We should also make an ImmutableSet version of SetFactory
-    boolean isImmutableSetAvailable = isImmutableSetAvailable();
     boolean isImmutableSetBuilderWithExpectedSizeAvailable = isImmutableSetBuilderWithExpectedSizeAvailable();
+    boolean isImmutableSetAvailable = isImmutableSetAvailable();
     // TODO(ronshapiro, gak): Use Sets.immutableEnumSet() if it's available?
     if (isImmutableSetAvailable && binding.dependencies().stream().allMatch(this::isSingleValue)) {
       return Expression.create(
@@ -157,10 +157,6 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
         .equals(ContributionType.SET);
   }
 
-  private boolean isImmutableSetAvailable() {
-    return elements.getTypeElement(ImmutableSet.class) != null;
-  }
-
   private boolean isImmutableSetBuilderWithExpectedSizeAvailable() {
     if (isImmutableSetAvailable()) {
       return methodsIn(elements.getTypeElement(ImmutableSet.class).getEnclosedElements())
@@ -168,5 +164,9 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
           .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
     }
     return false;
+  }
+
+  private boolean isImmutableSetAvailable() {
+    return elements.getTypeElement(ImmutableSet.class) != null;
   }
 }
