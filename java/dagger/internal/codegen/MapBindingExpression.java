@@ -68,8 +68,8 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
   @Override
   Expression getDependencyExpression(ClassName requestingClass) {
     // TODO(ronshapiro): We should also make an ImmutableMap version of MapFactory
-    boolean isImmutableMapAvailable = isImmutableMapAvailable();
     boolean isImmutableMapBuilderWithExpectedSizeAvailable = isImmutableMapBuilderWithExpectedSizeAvailable();
+    boolean isImmutableMapAvailable = isImmutableMapAvailable();
     // TODO(ronshapiro, gak): Use Maps.immutableEnumMap() if it's available?
     if (isImmutableMapAvailable && dependencies.size() <= MAX_IMMUTABLE_MAP_OF_KEY_VALUE_PAIRS) {
       return Expression.create(
@@ -150,10 +150,6 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
         : CodeBlock.of("");
   }
 
-  private boolean isImmutableMapAvailable() {
-    return elements.getTypeElement(ImmutableMap.class) != null;
-  }
-
   private boolean isImmutableMapBuilderWithExpectedSizeAvailable() {
     if (isImmutableMapAvailable()) {
       return methodsIn(elements.getTypeElement(ImmutableMap.class).getEnclosedElements())
@@ -161,5 +157,9 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
           .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
     }
     return false;
+  }
+
+  private boolean isImmutableMapAvailable() {
+    return elements.getTypeElement(ImmutableMap.class) != null;
   }
 }
