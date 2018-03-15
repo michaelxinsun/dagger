@@ -100,12 +100,10 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
         instantiation
             .add("$T.", isImmutableMapAvailable ? ImmutableMap.class : MapBuilder.class)
             .add(maybeTypeParameters(requestingClass));
-        if (isImmutableMapAvailable) {
-          if (isImmutableMapBuilderWithExpectedSizeAvailable) {
-            instantiation.add("builderWithExpectedSize($L)", dependencies.size());
-          } else {
-            instantiation.add("builder()");
-          }
+        if (isImmutableMapBuilderWithExpectedSizeAvailable) {
+          instantiation.add("builderWithExpectedSize($L)", dependencies.size());
+        } else if (isImmutableMapAvailable) {
+          instantiation.add("builder()");
         } else {
           instantiation.add("newMapBuilder($L)", dependencies.size());
         }
