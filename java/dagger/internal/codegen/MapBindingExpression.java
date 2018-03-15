@@ -157,8 +157,11 @@ final class MapBindingExpression extends SimpleInvocationBindingExpression {
   }
 
   private boolean isImmutableMapBuilderWithExpectedSizeAvailable() {
-    return methodsIn(elements.getTypeElement(ImmutableMap.class).getEnclosedElements())
-        .stream()
-        .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
+    if (isImmutableMapAvailable()) {
+      return methodsIn(elements.getTypeElement(ImmutableMap.class).getEnclosedElements())
+          .stream()
+          .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
+    }
+    return false;
   }
 }
