@@ -25,7 +25,6 @@ import static dagger.model.BindingKind.MULTIBOUND_MAP;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
