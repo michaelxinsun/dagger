@@ -99,12 +99,10 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
         instantiation
             .add("$T.", isImmutableSetAvailable ? ImmutableSet.class : SetBuilder.class)
             .add(maybeTypeParameter(requestingClass));
-        if (isImmutableSetAvailable) {
-          if (isImmutableSetBuilderWithExpectedSizeAvailable) {
-            instantiation.add("builderWithExpectedSize($L)", binding.dependencies().size());
-          } else {
-            instantiation.add("builder()");
-          }
+        if (isImmutableSetBuilderWithExpectedSizeAvailable) {
+          instantiation.add("builderWithExpectedSize($L)", binding.dependencies().size());
+        } else if (isImmutableSetAvailable) {
+          instantiation.add("builder()");
         } else {
           instantiation.add("newSetBuilder($L)", binding.dependencies().size());
         }
@@ -164,8 +162,11 @@ final class SetBindingExpression extends SimpleInvocationBindingExpression {
   }
 
   private boolean isImmutableSetBuilderWithExpectedSizeAvailable() {
-    return methodsIn(elements.getTypeElement(ImmutableSet.class).getEnclosedElements())
-        .stream()
-        .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
+    if (isImmutableSetAvailable) {
+      return methodsIn(elements.getTypeElement(ImmutableSet.class).getEnclosedElements())
+          .stream()
+          .anyMatch(method -> method.getSimpleName().contentEquals("builderWithExpectedSize"));
+    }
+    return false;
   }
 }
